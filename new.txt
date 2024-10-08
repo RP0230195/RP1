@@ -1,0 +1,1323 @@
+Practical No. 1
+
+Aim :- Implement breadth-first search algorithm (simple)
+
+Code :-
+
+#Bfs Simple
+from collections import deque
+def bfs(graph, start):
+    visited = set()
+    queue = deque([start])
+    while queue:
+        vertex = queue.popleft()
+        if vertex not in visited:
+            visited.add(vertex)
+            print(vertex,'\t',end='')
+# Explore neighbors
+        neighbors = graph[vertex]
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                queue.append(neighbor)
+# Example usage
+graph = {
+'A': ['B', 'C'],
+'B': ['A', 'D', 'E'],
+'C': ['A', 'F'],
+'D': ['B'],
+'E': ['B', 'F'],
+'F': ['C', 'E']
+}
+start_vertex = 'A'
+bfs(graph, start_vertex)
+
+ 
+Output :- 
+
+ 
+ 
+Practical No. 2
+
+Aim :-  Implement breadth-first search algorithm for Romania map problem
+
+Code :-
+
+#Bfs for romania problem
+from collections import deque
+def bfs(graph, start,goal):
+    visited = set()
+    queue = deque([start])
+    while queue:
+        vertex = queue.popleft()
+        if vertex not in visited:
+            visited.add(vertex)
+            print(vertex,'\t',end='')
+# Explore neighbors
+        neighbors = graph[vertex]
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                queue.append(neighbor)
+        if neighbor == goal:
+            print(neighbor)
+            return
+# Example usage
+graph = {'A': ['Z', 'S', 'T'],
+         'B': ['U','P', 'G','F'],
+         'C': ['D', 'R', 'P'],
+         'D': ['M'],
+         'E': ['H'],
+         'I': ['V','N'],
+         'L': ['T','M'],
+         'O': ['Z','S'],
+         'P': ['R'],
+         'U': ['V'],
+         'G':['B'],
+         'N':['I'],
+         'V': ['I','U'],
+         'Z': ['O','A'],
+         'S': ['O','A','R','F'],
+         'T': ['A','L'],
+         'M': ['L','D'],
+         'R': ['S','P','C'],
+         'F': ['S','B']}
+start_vertex = 'A'
+goal='B'
+bfs(graph, start_vertex,goal)
+
+Output :-
+
+
+ 
+ 
+Practical No. 3
+
+Aim :- Implement Iterative depth first search algorithm for Romania map problem 
+
+Code :-
+
+#Iddfs for romania map problem
+dict_hn={'Arad':336,'Bucharest':0,'Craiova':160,'Drobeta':242,'Eforie':161,
+         'Fagaras':176,'Giurgiu':77,'Hirsova':151,'Iasi':226,'Lugoj':244,
+         'Mehadia':241,'Neamt':234,'Oradea':380,'Pitesti':100,'Rimnicu':193,
+         'Sibiu':253,'Timisoara':329,'Urziceni':80,'Vaslui':199,'Zerind':374}
+
+dict_gn=dict(
+Arad=dict(Zerind=75,Timisoara=118,Sibiu=140),
+Bucharest=dict(Urziceni=85,Giurgiu=90,Pitesti=101,Fagaras=211),
+Craiova=dict(Drobeta=120,Pitesti=138,Rimnicu=146),
+Drobeta=dict(Mehadia=75,Craiova=120),
+Eforie=dict(Hirsova=86),
+Fagaras=dict(Sibiu=99,Bucharest=211),
+Giurgiu=dict(Bucharest=90),
+Hirsova=dict(Eforie=86,Urziceni=98),
+Iasi=dict(Neamt=87,Vaslui=92),
+Lugoj=dict(Mehadia=70,Timisoara=111),
+Mehadia=dict(Lugoj=70,Drobeta=75),
+Neamt=dict(Iasi=87),
+Oradea=dict(Zerind=71,Sibiu=151),
+Pitesti=dict(Rimnicu=97,Bucharest=101,Craiova=138),
+Rimnicu=dict(Sibiu=80,Pitesti=97,Craiova=146),
+Sibiu=dict(Rimnicu=80,Fagaras=99,Arad=140,Oradea=151),
+Timisoara=dict(Lugoj=111,Arad=118),
+Urziceni=dict(Bucharest=85,Hirsova=98,Vaslui=142),
+Vaslui=dict(Iasi=92,Urziceni=142),
+Zerind=dict(Oradea=71,Arad=75)
+)
+import queue as Q
+#from RMP import dict_hn
+
+start='Arad'
+goal='Bucharest'
+result=''
+
+def DLS(city, visitedstack, startlimit, endlimit):
+    global result
+    found=0
+    result=result+city+' '
+    visitedstack.append(city)
+    if city==goal:
+        return 1
+    if startlimit==endlimit:
+        return 0
+    for eachcity in dict_gn[city].keys():
+        if eachcity not in visitedstack:
+            found=DLS(eachcity, visitedstack, startlimit+1, endlimit)
+            if found:
+                return found
+
+def IDDFS(city, visitedstack, endlimit):
+    global result
+    for i in range(0, endlimit):
+        print("Searching at Limit: ",i)
+        found=DLS(city, visitedstack, 0, i)
+        if found:
+            print("Found")
+            break
+        else:
+            print("Not Found! ")
+            print(result)
+            print("-----")
+            result=' '
+            visitedstack=[]
+
+def main():
+    visitedstack=[]
+    IDDFS(start, visitedstack, 9)
+    print("IDDFS Traversal from ",start," to ", goal," is: ")
+    print(result)
+
+
+main()
+ 
+Output :-
+
+ 
+
+ 
+Practical No. 4 
+
+Aim :- Implement A* search algorithm for Romania map problem
+
+Code :-
+
+dict_hn={'Arad':336,'Bucharest':0,'Craiova':160,'Drobeta':242,'Eforie':161,
+         'Fagaras':176,'Giurgiu':77,'Hirsova':151,'Iasi':226,'Lugoj':244,
+         'Mehadia':241,'Neamt':234,'Oradea':380,'Pitesti':100,'Rimnicu':193,
+         'Sibiu':253,'Timisoara':329,'Urziceni':80,'Vaslui':199,'Zerind':374}
+
+dict_gn=dict(
+Arad=dict(Zerind=75,Timisoara=118,Sibiu=140),
+Bucharest=dict(Urziceni=85,Giurgiu=90,Pitesti=101,Fagaras=211),
+Craiova=dict(Drobeta=120,Pitesti=138,Rimnicu=146),
+Drobeta=dict(Mehadia=75,Craiova=120),
+Eforie=dict(Hirsova=86),
+Fagaras=dict(Sibiu=99,Bucharest=211),
+Giurgiu=dict(Bucharest=90),
+Hirsova=dict(Eforie=86,Urziceni=98),
+Iasi=dict(Neamt=87,Vaslui=92),
+Lugoj=dict(Mehadia=70,Timisoara=111),
+Mehadia=dict(Lugoj=70,Drobeta=75),
+Neamt=dict(Iasi=87),
+Oradea=dict(Zerind=71,Sibiu=151),
+Pitesti=dict(Rimnicu=97,Bucharest=101,Craiova=138),
+Rimnicu=dict(Sibiu=80,Pitesti=97,Craiova=146),
+Sibiu=dict(Rimnicu=80,Fagaras=99,Arad=140,Oradea=151),
+Timisoara=dict(Lugoj=111,Arad=118),
+Urziceni=dict(Bucharest=85,Hirsova=98,Vaslui=142),
+Vaslui=dict(Iasi=92,Urziceni=142),
+Zerind=dict(Oradea=71,Arad=75)
+)
+import queue as Q
+#from RMP import dict_gn
+#from RMP import dict_hn
+
+start='Arad'
+goal='Bucharest'
+result=''
+
+def get_fn(citystr):
+    cities=citystr.split(" , ")
+    hn=gn=0
+    for ctr in range(0, len(cities)-1):
+        gn=gn+dict_gn[cities[ctr]][cities[ctr+1]]
+    hn=dict_hn[cities[len(cities)-1]]
+    return(hn+gn)
+
+def expand(cityq):
+    global result
+    tot, citystr, thiscity=cityq.get()
+    if thiscity==goal:
+        result=citystr+" : : "+str(tot)
+        return
+    for cty in dict_gn[thiscity]:
+        cityq.put((get_fn(citystr+" , "+cty), citystr+" , "+cty, cty))
+    expand(cityq)
+
+def main():
+    cityq=Q.PriorityQueue()
+    thiscity=start
+    cityq.put((get_fn(start),start,thiscity))
+    expand(cityq)
+    print("The A* path with the total is: ")
+    print(result)
+
+main()
+
+Output :-
+
+ 
+
+Practical No. 5
+
+Aim :- Implement recursive best first search algorithm for Romania map problem 
+
+Code :-
+
+dict_hn={'Arad':336,'Bucharest':0,'Craiova':160,'Drobeta':242,'Eforie':161,
+         'Fagaras':176,'Giurgiu':77,'Hirsova':151,'Iasi':226,'Lugoj':244,
+         'Mehadia':241,'Neamt':234,'Oradea':380,'Pitesti':100,'Rimnicu':193,
+         'Sibiu':253,'Timisoara':329,'Urziceni':80,'Vaslui':199,'Zerind':374}
+
+dict_gn=dict(
+Arad=dict(Zerind=75,Timisoara=118,Sibiu=140),
+Bucharest=dict(Urziceni=85,Giurgiu=90,Pitesti=101,Fagaras=211),
+Craiova=dict(Drobeta=120,Pitesti=138,Rimnicu=146),
+Drobeta=dict(Mehadia=75,Craiova=120),
+Eforie=dict(Hirsova=86),
+Fagaras=dict(Sibiu=99,Bucharest=211),
+Giurgiu=dict(Bucharest=90),
+Hirsova=dict(Eforie=86,Urziceni=98),
+Iasi=dict(Neamt=87,Vaslui=92),
+Lugoj=dict(Mehadia=70,Timisoara=111),
+Mehadia=dict(Lugoj=70,Drobeta=75),
+Neamt=dict(Iasi=87),
+Oradea=dict(Zerind=71,Sibiu=151),
+Pitesti=dict(Rimnicu=97,Bucharest=101,Craiova=138),
+Rimnicu=dict(Sibiu=80,Pitesti=97,Craiova=146),
+Sibiu=dict(Rimnicu=80,Fagaras=99,Arad=140,Oradea=151),
+Timisoara=dict(Lugoj=111,Arad=118),
+Urziceni=dict(Bucharest=85,Hirsova=98,Vaslui=142),
+Vaslui=dict(Iasi=92,Urziceni=142),
+Zerind=dict(Oradea=71,Arad=75)
+)
+import queue as Q
+
+
+start='Arad'
+goal='Bucharest'
+result=''
+
+
+def get_fn(citystr):
+    cities=citystr.split(',')
+    hn=gn=0
+    for ctr in range(0,len(cities)-1):
+        gn=gn+dict_gn[cities[ctr]][cities[ctr+1]]
+    hn=dict_hn[cities[len(cities)-1]]
+    return(hn+gn)
+
+def printout(cityq):
+    for i in range(0,cityq.qsize()):
+        print(cityq.queue[i])
+
+def expand(cityq):
+    global result
+    tot,citystr,thiscity=cityq.get()
+    nexttot=999
+    if not cityq.empty():
+        nexttot,nextcitystr,nextthiscity=cityq.queue[0]
+    if thiscity==goal and tot<nexttot:
+        result=citystr+'::'+str(tot)
+        return
+    print("Expanded city------------------------------",thiscity)
+    print("Second best f(n)------------------------------",nexttot)
+    tempq=Q.PriorityQueue()
+    for cty in dict_gn[thiscity]:
+            tempq.put((get_fn(citystr+','+cty),citystr+','+cty,cty))
+    for ctr in range(1,3):
+        ctrtot,ctrcitystr,ctrthiscity=tempq.get()
+        if ctrtot<nexttot:
+            cityq.put((ctrtot,ctrcitystr,ctrthiscity))
+        else:
+            cityq.put((ctrtot,citystr,thiscity))
+            break
+    printout(cityq)
+    expand(cityq)
+def main():
+    cityq=Q.PriorityQueue()
+    thiscity=start
+    cityq.put((999,"NA","NA"))
+    cityq.put((get_fn(start),start,thiscity))
+    expand(cityq)
+    print(result)
+main()
+
+Output :-
+
+ 
+ 
+Practical No. 6
+
+Aim :- Implement decision tree learning algorithm
+
+Code :-
+
+import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+# Load the dataset
+#Titanic - Machine Learning from Disaster from kaggle.com
+data = pd.read_csv('train.csv')
+print(data.info(),'\n')
+# Define the target column and feature columns
+target_column = 'Survived'
+feature_columns = ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked'] #List of the columns to be used as features for prediction.
+# Encode categorical features
+label_encoder = LabelEncoder()
+data['Sex'] = label_encoder.fit_transform(data['Sex'])
+data['Embarked'] = label_encoder.fit_transform(data['Embarked'])
+# Handle missing values
+data['Age'].fillna(data['Age'].median())
+data['Fare'].fillna(data['Fare'].median())
+# Define features and target
+X = data[feature_columns]
+Y = data[target_column]
+# Split the dataset into training and testing sets
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+# Create and train a Decision Tree Classifier
+clf = DecisionTreeClassifier()
+clf.fit(X_train, Y_train)
+# Make predictions and calculate accuracy
+Y_pred = clf.predict(X_test)
+accuracy = accuracy_score(Y_test, Y_pred)
+print(f"Accuracy: {accuracy:.2f}")
+# Visualize and interpret the generated decision tree
+plt.figure(figsize=(30, 25), dpi=100)
+plot_tree(clf, filled=True, feature_names=feature_columns, class_names=['Not Survived', 'Survived'])
+plt.title('Decision Tree Visualization\nTitanic Passenger Survival Predication')
+plt.show()
+
+Download dataset file from https://www.kaggle.com/competitions/titanic/data?select=train.csv
+
+ 
+
+Output :-
+
+ 
+
+  
+Practical No.7
+
+Aim :- Implement Decision tree learning algorithm for the restaurant waiting problem 
+
+Code :-
+
+import math
+
+class DataSet:
+    def __init__(self, ds):
+        self.dataset = ds      
+    
+    def print(self):
+        print(self.dataset)
+    
+    def uniqueAns(self): 
+        return len(set(self.dataset["Ans"]))
+    
+    def getMaxOccur(self):
+        d = {self.dataset["Ans"].count(x): x for x in self.dataset["Ans"]}
+        keys = sorted(d.keys(), reverse=True)
+        return d[keys[0]] if len(keys) > 1 and keys[0] != keys[1] else None
+    
+    def copy(self):
+        newdataset = {key: self.dataset[key].copy() for key in self.dataset.keys()}
+        return DataSet(newdataset)
+
+    def maxInfoGain(self):
+        features = self.dataset["Features"]
+        if features:
+            maxinfogain = self.infoGain(features[0])
+            maxfeat = features[0]
+            for feat in features:
+                ig = self.infoGain(feat)                
+                if ig >= maxinfogain:
+                    maxinfogain = ig
+                    maxfeat = feat
+            return maxfeat
+        return None
+            
+    def infoGain(self, feat):
+        if feat in self.dataset:
+            featlist1 = self.dataset[feat]
+            total = len(featlist1)
+            featset = set(featlist1)
+            d = {item: featlist1.count(item) for item in featset}
+            branches = self.splitOnFeature(feat)
+            gain = sum((d[key] / total) * dsobj.getEntropy() for key, dsobj in branches.items())
+            return self.getEntropy() - gain
+        print("Feature does not exist")
+        return None
+
+    def getEntropy(self):
+        list1 = self.dataset["Ans"]
+        total = len(list1)
+        aset = set(list1)
+        d = {item: list1.count(item) for item in aset}
+        ent = -sum((d[k]/total) * math.log(d[k]/total, 2) for k in aset)
+        return ent
+        
+    def splitOnFeature(self, feat):
+        if feat in self.dataset["Features"]:
+            ans_set = set(self.dataset[feat])
+            newfeatures = self.dataset["Features"].copy()
+            newfeatures.remove(feat)
+            newdataset = {akey: [] for akey in self.dataset.keys() if akey != feat}
+            newdataset["Features"] = newfeatures
+            branches = {akey: {key: [] for key in newdataset} for akey in ans_set}
+            
+            for i, featval in enumerate(self.dataset[feat]):
+                if featval in branches:
+                    branches[featval]["Ans"].append(self.dataset["Ans"][i])
+                    for nfeat in newfeatures:
+                        branches[featval][nfeat].append(self.dataset[nfeat][i])
+            
+            for key in branches:
+                branches[key] = DataSet(branches[key])
+                
+            return branches
+        print(feat, "feature is not available")
+        return None
+
+def calculateAns(dsobj, feature, maxoccur, descr):
+    branches = dsobj.splitOnFeature(feature)
+    
+    for key, newdsobj in branches.items():
+        if newdsobj.uniqueAns() == 1:
+            print("Answer for", descr + "-" + feature, "with value =", key, "is:", newdsobj.dataset['Ans'][0])
+        elif newdsobj.uniqueAns() == 0 or (newdsobj.uniqueAns() > 1 and not newdsobj.dataset["Features"]):
+            print("Answer for", descr + "-" + feature, "with value =", key, "is:", maxoccur)            
+        else:
+            newfeat = newdsobj.maxInfoGain()
+            newmaxoccur = newdsobj.getMaxOccur() or maxoccur
+            calculateAns(newdsobj, newfeat, newmaxoccur, descr + ":" + feature + ":->" + key + " ")
+
+dataset = {
+    "Ans": ["Wait", "Wait", "Leave", "Wait", "Wait", "Wait", "Leave", "Leave", "Wait", "Leave"],
+    "Features": ["Reservation", "Raining", "BadService"],
+    "Reservation": ["T", "T", "T", "F", "T", "T", "T", "T", "T", "F"],
+    "Raining": ["T", "F", "T", "T", "T", "T", "F", "T", "T", "F"],
+    "BadService": ["F", "F", "T", "F", "F", "F", "T", "T", "F", "F"]
+}
+
+d1 = DataSet(dataset)
+if d1.uniqueAns() != 1:
+    feat = d1.maxInfoGain()
+    calculateAns(d1, feat, d1.getMaxOccur(), "")
+
+Output :-
+
+ 
+Practical No. 8
+
+
+Aim :- Implement feed forward-back propagation neural network learning algorithm for the restaurant waiting problem 
+
+Code : -
+
+from math import exp
+
+def activate(weights, inputs):
+    activation = weights[-1]  # Bias term
+    for i in range(len(weights) - 1):
+        activation += weights[i] * inputs[i]
+    print('Activation value : ', activation)
+    return activation
+
+# Transfer neuron activation to output
+def transfer(activation):
+    return 1.0 / (1.0 + exp(-activation))
+
+# Forward propagate input to a network output
+def forward_propagate(network, row):
+    inputs = row
+    for layer in network:
+        new_inputs = []
+    for neuron in layer:
+        activation = activate(neuron['weights'], inputs)
+        neuron['output'] = transfer(activation)
+        new_inputs.append(neuron['output'])
+    inputs = new_inputs
+    return inputs
+
+# Test forward propagation
+network = [
+    [{'weights': [0.13, 0.84]}],  # Adding bias term to weights
+    [{'weights': [0.25, 0.49]}],  # Adding bias term to weights
+    [{'weights': [0.44, 0.65]}]   # Adding bias term to weights
+]
+row = [1, 0, None]  # Including bias input of 1 in the input row
+output = forward_propagate(network, row)
+print('Output : ', output)
+Output :- 
+
+ 
+
+ 
+Practical No. 9
+
+Aim :- Implement Adaboost ensemble learning algorithm
+
+Code :-
+
+class Perceptron :
+    def __init__(self, a,b,c,tval):
+        self.x = a #nput vector
+        self.y = b # activation result
+        self.result = c # summation result
+        self.threshold = tval
+        self.w= []
+    def h(self,tw): # calculating summation hypothesis function
+        hresult= []
+        for i in range(0 , len(self.result)):
+            hresult.append(0)
+            for j in range(0,len(tw)):
+                hresult[i]=hresult[i]+(tw[j][i]*self.x[j][i])   
+        return hresult
+    def checkthreshold(self, hresult):  # hard threshold function technique for regression
+        flag = True
+        actfun =[]
+        for i in range(0 , len(self.result)) :            
+            if (hresult[i] <= self.threshold ):
+                actfun.append(0)
+            else :
+                actfun.append(1)
+        print("Ans:",hresult)
+        print("Result act fun:", actfun)
+
+        for i in range(0 , len(self.x)) :
+            if (actfun[i] != self.result[i]) :
+                return False
+        return True   
+    def training(self, tw, alpha):#passing w vector and alpha value
+        i=1
+        while i<=10 : # Max 10 attempts                        
+                print("Attempt ", i  )
+                hresult = self.h(tw) 
+                if(self.checkthreshold(hresult)) : #if training result matches the test result                   
+                    self.w = tw                                     
+                    print("In Attempt number ", i,  ", i got it! I think i have learnt enough: w0-->")
+                    for x in range(0,len(self.w)):
+                        print("w",x,"->",self.w[x])
+                    break
+                i = i +1      
+                # Changing values of w to reduce error/loss using batch gradient descent learning rule
+                for j in range(0,len(self.result)) :
+                    for k in range(0,len(tw)):
+                        sum=0
+                        for n in range(0,len(tw)):
+                            sum=sum+(self.result[j]-hresult[j])*self.x[n][j]  
+                        tw[k][j] = tw[k][j] + alpha*sum
+        if(i>=100):
+            print("I am exhausted, tried 100 iterations! plz change something else...")        
+a = [[1,1,1,1],[0,0,1,1],[0,1,0,1]]#x vector,x0 is dummy
+b = [0,1,1,1]
+c = [0.5,0.7,1.3,1.5]#sample h values
+p = Perceptron(a,b,c,0.5)
+print("Whether reservation is done =", p.x[0])
+print("Whether raining outside=", p.x[1])
+print("With threshold value =", p.threshold)
+r=p.h([[0.5,0.5,0.5,0.5],[0.8,0.8,0.8,0.8],[0.2,0.2,0.2,0.2]])
+print("Status:",p.checkthreshold(r))
+print("Trying with alpha=0.01 -->")
+p.training([[0.7,0.7,0.7,0.7],[0.5,0.5,0.5,0.5],[0.4,0.4,0.4,0.4]],0.01)
+print("Trying with alpha=0.5 -->")
+p.training([[0.7,0.7,0.7,0.7],[0.5,0.5,0.5,0.5],[0.4,0.4,0.4,0.4]],0.5)
+print("Trying with new data-->")
+p.training([[0.2,0.2,0.2,0.2],[0.3,0.3,0.3,0.3],[0.5,0.5,0.5,0.5]],0.01)
+
+ 
+Output :-
+
+ 
+ 
+Practical No. 10
+
+Aim :- Implement Naive Bayes learning algorithm for restaurant waiting problem
+
+Code :- 
+
+class NavieBayes:
+    def __init__(self,f,r):
+        self.features = f
+        self.response =r
+    def predict(self,custcase):
+        anskeys = list(self.response.keys())
+        ansvalues = dict.fromkeys(anskeys,0)
+        for key in anskeys:
+            ansvalues[key]=self.response[key]
+            for ikey,ival in custcase.items():
+                ansvalues[key] = ansvalues[key] * self.features[ikey][ival][key]
+        print(ansvalues)
+        maxkey = ""
+        maxans = -1
+        for ikey,ival in ansvalues.items():
+            if ival > maxans:
+                maxans = ival
+                maxkey = ikey
+        return maxkey
+response = {
+    "Wait":0.4,"Leave":0.6
+}
+features = {
+    "Reservation":{
+        "Yes":{"Wait":0.5,"Leave":0.666667},
+        "No":{"Wait":0.5,"Leave":0.333333}
+    },
+    "Time>30":{
+        "Yes":{"Wait":0.25,"Leave":0.83333},
+        "No":{"Wait":0.75,"Leave":0.16667}
+    }
+}
+nb = NavieBayes(features,response)
+resstatus = input("Manager asks Customer , have you reserved table ? (Yes/No) :")
+timestatus = input("Customer asks Manager , Will it take more than 30 mins? (Yes/No) :")
+custcase = {"Reservation":resstatus,"Time>30":timestatus}
+print("Manager predicts that customer will : ",nb.predict(custcase))
+
+Output :-
+
+ 
+ 
+Practical No. 11
+
+Aim :- Implement passive reinforcement learning algorithm based on adaptive dynamic programming (ADP) for the 3 by 4 world problem
+
+Code :-
+
+import numpy as np
+def return_state_utility(v,T,u,reward,gamma):
+    #four actions : up , left, right , down
+    action_array = np.zeros(4)#initial values
+    for action in range(0,4):
+        action_array[action] = np.sum(np.multiply(u,np.dot(v,T[: , : , action])))
+    return reward + gamma * np.max(action_array)
+def main():
+    #The agent starts from (1 , 1)
+    v = np.array([[0.0 , 0.0 , 0.0 , 0.0 ,
+                           0.0 , 0.0 , 0.0 , 0.0 ,
+                           1.0 , 0.0, 0.0 , 0.0]])
+    #Transition matrix to be loaded from file : T.npy
+    T = np.load('T.npy')
+    #Utility vector
+    u = np.array([[0.812 , 0.868 , 0.918 , 1.0 ,
+                          0.762 , 0.0 , 0.660 , -1.0 ,
+                           0.705 , 0.655 , 0.611 , 0.388]])
+    #Defining the reward for the state : (1 , 1)
+    reward = -0.4
+    gamma = 1.0
+    utility_11 = return_state_utility(v,T,u,reward,gamma)
+    print('Utility of the state (1 , 1) : '+ str(utility_11))
+main()
+ 
+Output :-
+
+ 
+ 
+Practical No. 12
+
+Aim :- Write a program to simulate N Queen Problem 
+
+Code :-
+
+import numpy as np
+
+global N
+N = 4
+
+def printSolution(board):
+    for i in range(N):
+        for j in range(N):
+            print(board[i][j],'\t',end=' ')
+        print()
+def isSafe(board,row,col):
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+    for i , j in zip(range(row , -1 , -1),range(col, -1 , -1)):
+        if board[i][j] == 1:
+            return False
+    for i , j in zip(range(row , N , 1),range(col, -1 , -1)):
+        if board[i][j] == 1:
+            return False
+    return True
+def solveNQUtil(board, col):
+    if col >= N:
+        return True
+    for i in range(N):
+        if isSafe(board , i , col):
+            board[i][col] = 1
+            if solveNQUtil(board, col + 1) == True:
+                return True
+            board[i][col] = 0
+    return False
+def solveNQ():
+    board = np.zeros((4 , 4))
+    print('Initial Board : \n',board)
+    if solveNQUtil(board , 0) == False:
+        print('Solution doesn\'t exist')
+        return False
+    print('\nBoard after the N Queen Solution : \n')
+    printSolution(board)
+    return True
+#Driver program to test above function
+solveNQ()
+
+Output :-
+
+ 
+ 
+Practical No. 13
+
+Aim :- Write a program to solve water jug problem 
+
+Code :-
+
+def water_jug_problem(jug1_cap , jug2_cap , target_amount):
+    j1 = 0
+    j2 = 0
+    actions = [('fill',1) , ('fill',2) , ('empty',1) , ('empty',2) , ('pour', 1, 2) , ('pour', 2 , 1)]
+    #Create an empty set to store visited states
+    visited = set()
+    queue = [(j1 , j2, [] )]
+    while queue:
+        j1, j2 , seq = queue.pop(0)
+        if (j1, j2) not in visited:
+            visited.add((j1 , j2))
+        if j1 == target_amount:
+            return seq
+        for action in actions:
+            if action[0] == 'fill':
+                if action[1] == 1:
+                    next_state = (jug1_cap, j2)
+                else:
+                    next_state = (j1, jug2_cap)
+            elif action[0] == 'empty':
+                if action[1] == 1:
+                    next_state = (0, j2)
+                else:
+                    next_state = (j1, 0)
+            else:
+                if action[1] == 1:
+                    amount = min(j1, jug2_cap - j2)
+                    next_state = (j1 - amount , j2 + amount)
+                else:
+                    amount = min(j2, jug1_cap - j1)
+                    next_state = (j1 + amount, j2 - amount)
+            if next_state not in visited:
+                next_seq = seq + [action]
+                queue.append((next_state[0] , next_state[1] , next_seq))
+    return None
+result = water_jug_problem(4, 3, 2)
+print(result)
+
+Output :-
+
+ 
+
+-------------------------STQA---------------------------------------
+-------------------
+
+
+Practical No. 5
+
+Aim :- Install Selenium server (Selenium RC) and demonstrate it using a script in Java.
+
+❖	Add selenium dependency in maven build java project (jar files):
+●	pom.xml :
+
+<dependencies>
+  <dependency>
+      	<groupId>org.seleniumhq.selenium</groupId>
+      	<artifactId>selenium-java</artifactId>
+      	<version>4.24.0</version> <!-- Make sure to use the latest version -->
+   </dependency>
+</dependencies>
+Code :-
+
+package practicals;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.*;
+
+public class practical_5 {
+    public static void main(String[] args) {
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Admin\\Downloads\\Programs\\chromedriver-win64\\chromedriver.exe");
+        
+        //optional step for brave browser
+        ChromeOptions options = new ChromeOptions();
+        options.setBinary("C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe");//path to brave browser
+
+        // Initialize the WebDriver with Brave settings
+        WebDriver driver = new ChromeDriver(options);
+        driver.navigate().to("https://www.youtube.com/results?search_query=4k+videos");
+        driver.manage().window().maximize();
+    }
+}
+ 
+Output :-
+
+
+
+Practical No. 7
+
+Aim :- Write and test a program to login to a specific web page.
+
+Code :-
+
+1.	RegisterUser.java :
+package pract7;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.JavascriptExecutor;
+
+public class RegisterUser {
+    public static void main(String[] args) {
+        // Set the path to your ChromeDriver
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\ADMIN\\Downloads\\Drivers\\chromedriver-win64\\chromedriver.exe");
+
+        // Initialize WebDriver (Chrome in this case)
+        WebDriver driver = new ChromeDriver();
+
+        // Navigate to the target page
+        driver.navigate().to("https://demo.wpeverest.com/user-registration/student-registration-form/");
+        driver.manage().window().maximize();
+
+        // Fill in the form fields
+        driver.findElement(By.xpath("//*[@id='first_name']")).sendKeys("Pranav");
+        driver.findElement(By.xpath("//*[@id='last_name']")).sendKeys("Pradhan");
+
+        // Scroll to the email field and input email
+        WebElement emailField = driver.findElement(By.xpath("//*[@id='user_email']"));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", emailField);
+        emailField.sendKeys("demo69@gmail.com");
+
+        // Confirm email and fill in other details
+        driver.findElement(By.xpath("//*[@id='user_confirm_email']")).sendKeys("demo69@gmail.com");
+        driver.findElement(By.xpath("//*[@id='user_pass']")).sendKeys("demo@1234");
+        driver.findElement(By.xpath("//*[@id='user_confirm_password']")).sendKeys("demo@1234");
+
+        // Scroll to and click the privacy policy checkbox
+        WebElement checkBox = driver.findElement(By.xpath("//*[@id='privacy_policy_1623078743']"));
+        js.executeScript("arguments[0].scrollIntoView(true);", checkBox);
+        checkBox.click();
+
+        // Click the submit button
+        driver.findElement(By.xpath("//*[@id='user-registration-form-837']/form/div[10]/button")).click();
+
+        // Close the browser after submission
+        driver.quit();
+    }
+}
+Output :-
+
+
+2.LoginUser.java : 
+package pract7;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
+
+public class RegisterUser {
+
+    public static void main(String[] args) {
+        // Set path to ChromeDriver
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\ADMIN\\Downloads\\Drivers\\chromedriver-win64\\chromedriver.exe");
+
+        // Set ChromeOptions to use Brave browser
+
+
+        // Initialize WebDriver
+        WebDriver driver = new ChromeDriver();
+
+        // Navigate to the login page
+        driver.navigate().to("https://demo.wpeverest.com/user-registration/my-account/");
+        driver.manage().window().maximize();
+
+        // Initialize WebDriverWait to wait for elements
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // Wait for the username field to be visible and enter the email
+        WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='username']")));
+        usernameField.sendKeys("demo69@gmail.com");
+
+        // Wait for the password field to be visible and enter the password
+        WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='password']")));
+        passwordField.sendKeys("demo@1234");
+
+        // Wait for the login button to be clickable and click it
+        WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='ur-frontend-form']/form/div/div/div[1]/input")));
+        loginButton.click();
+
+        // Optionally, you can add a step here to check if the login was successful
+        // Close the browser
+        driver.quit();
+    }
+}
+
+
+Output :-
+
+Practical No. 8
+
+Aim :- Write and test a program to update 10 student records into table into Excel file
+
+❖	Add selenium dependency in maven build java project (jar files):
+●	pom.xml :
+
+<dependency>
+    	<groupId>net.sourceforge.jexcelapi</groupId>
+    	<artifactId>jxl</artifactId>
+    	<version>2.6.12</version>
+	</dependency>
+Code :-
+package pract7;
+
+import jxl.*;
+import jxl.write.*;
+import jxl.write.Number;
+import java.io.*;
+import java.util.Locale;
+
+public class RegisterUser {
+
+	public static void main(String[] args)throws IOException, WriteException {
+		int r = 0 , c = 0;
+		String header[] = {"Student Name ","Subject 1","Subject 2",
+				"Subject 3","Total"};
+		String sName[] = {"Pranav","Ankur","Aniket","Piyush","Nikhil","Parvati","Shivraj","Yash","Rohit","Rahul"};
+		int marks[] = {85,90,81,82,74,76,89,92,96,85};
+		File file = new File("C:\\Users\\ADMIN\\Documents\\rohit.xls");
+		WorkbookSettings wbSettings = new WorkbookSettings();
+		wbSettings.setLocale(new Locale("en","EN"));
+		WritableWorkbook workbook = Workbook.createWorkbook(file,wbSettings);
+		workbook.createSheet("Report", 0);
+		WritableSheet excelSheet = workbook.getSheet(0);
+		for(r = 0 ; r < 1 ; r++ ) {
+			for(c = 0 ; c < header.length ; c++ ) {
+				Label label = new Label(c,r,header[c]);
+				excelSheet.addCell(label);
+			}
+		}
+		for(r = 1 ; r <= sName.length ; r++ ) {
+				Label label = new Label(0, r, sName[r-1]);
+				excelSheet.addCell(label);
+		}
+		for(r = 1 ; r <= sName.length ; r++) {
+			for(c = 1; c < 4 ; c++ ) {
+				Number num = new Number(c, r , marks[r-1]);
+				excelSheet.addCell(num);
+			}
+		}
+		for(r = 1 ; r <= sName.length ; r++) {
+			int total = marks[r-1] * 3;
+			Number num = new Number(4, r, total);
+			excelSheet.addCell(num);
+		}
+		workbook.write();
+		workbook.close();
+		System.out.println("Excel File Created");
+	}
+
+
+}
+
+Output :-
+
+
+
+Practical No. 9
+
+Aim :- Write and test a program to select the number of students who have scored more than 60 in any one subject (or all subjects).
+
+
+❖	Add selenium dependency in maven build java project (jar files):
+●	pom.xml :
+
+<dependency>
+    	<groupId>net.sourceforge.jexcelapi</groupId>
+    	<artifactId>jxl</artifactId>
+    	<version>2.6.12</version>
+	</dependency>
+
+Code :-
+package pract7;
+
+import java.io.File;
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+
+
+public class RegisterUser {
+
+    public static void main(String[] args) {
+        try {
+            Workbook workbook = Workbook.getWorkbook(new File("C:\\\\Users\\\\ADMIN\\\\Documents\\\\rohit.xls"));
+            Sheet sheet = workbook.getSheet(0);
+            int rows = sheet.getRows();
+            int columns = sheet.getColumns();
+            int count = 0;
+
+            for (int i = 1; i < rows; i++) { // Start from 1 to skip header
+                boolean scored60OrMore = false;
+                for (int j = 2; j < 4; j++) { // Start from 2 and end from 4 which last column of subject 
+                    Cell cell = sheet.getCell(j, i);
+                    int score = Integer.parseInt(cell.getContents());
+                    if (score >= 60) {
+                        scored60OrMore = true;
+                        break; // No need to check other subjects if one score is >= 60
+                    }
+                }
+                if (scored60OrMore) {
+                    count++;
+                }
+            }
+            
+            
+            System.out.println("Number of students who scored 60 or more in any subject: " + count);
+            workbook.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+}
+
+Output :-
+
+Practical No. 10
+
+Aim :- Write and test a program to provide total number of objects present / available on the page.
+
+Code :-
+package pract7;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class RegisterUser {
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\ADMIN\\Downloads\\Drivers\\chromedriver-win64\\chromedriver.exe");
+
+        WebDriver driver = new ChromeDriver();
+		try
+		{
+			driver.navigate().to("https://www.youtube.com/feed/trending");
+			driver.manage().window().maximize();
+			java.util.List<WebElement> elements = driver.findElements(By.cssSelector("*"));
+            // Print the total number of elements
+            System.out.println("Page Url : https://www.youtube.com/feed/trending\nTotal number of objects on the page: " + elements.size());
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			driver.quit();
+		}
+	}
+}
+
+ 
+Output :-
+
+
+
+Practical No. 11
+
+Aim :- Write and test a program to get the number of items in a list / combo box.
+
+Code :-
+
+Cars.html :
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title>Cars</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="" />
+	</head>
+	<body>
+		<script src="" async defer></script>
+		<div style="display: flex;flex-direction: column;align-items: center;gap: 40px;"
+		>
+			<header
+				style="font-size: 25px; text-decoration: underline; font-weight: bold"
+			>
+				Car Names
+			</header>
+			<select id="cars">
+				<option value="1">Bugatti</option>
+				<option value="2">Ferrari</option>
+				<option value="3">Mercedes</option>
+				<option value="4">Lamborghini</option>
+				<option value="5">Porsche</option>
+				<option value="6">Audi</option>
+				<option value="7">BMW</option>
+				<option value="8">McLaren</option>
+				<option value="9">Aston Martin</option>
+				<option value="10">Tesla</option>
+			</select>
+		</div>
+	</body>
+</html>
+
+
+Code:-
+package pract7;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.Select;
+public class RegisterUser {
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\ADMIN\\Downloads\\Drivers\\chromedriver-win64\\chromedriver.exe");
+       
+        WebDriver driver = new ChromeDriver();
+		try
+		{
+			driver.navigate().to("C:\\Users\\ADMIN\\Cars.html");
+			driver.manage().window().maximize();
+			WebElement comboBoxElement = driver.findElement(By.id("cars")); 
+	        Select comboBox = new Select(comboBoxElement);
+	        List<WebElement> options1 = comboBox.getOptions();
+	        System.out.println("Number of items in the combo box: " + options1.size());
+	        for (WebElement option : options1) {
+	            System.out.println("Option: " + option.getText());
+	        }
+	        WebElement selectedOption = comboBox.getFirstSelectedOption();
+	        System.out.println("Selected option: " + selectedOption.getText());
+	        System.out.println("Test executed succesfully.....");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			driver.quit();
+		}
+		
+	}
+}
+
+ 
+Output :-
+
+
+Practical No. 12
+
+Aim :- Write and test a program to count the number of check boxes on the page checked and unchecked count.
+
+
+cars.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkbox Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Checkbox Counter</h1>
+    <form id="checkboxForm">
+        <input type="checkbox" id="checkbox1" checked> Checkbox 1<br>
+        <input type="checkbox" id="checkbox2"> Checkbox 2<br>
+        <input type="checkbox" id="checkbox3" checked> Checkbox 3<br>
+        <input type="checkbox" id="checkbox4"> Checkbox 4<br>
+        <input type="checkbox" id="checkbox5"> Checkbox 5<br>
+    </form>
+
+   
+
+  
+</body>
+</html>
+
+
+
+
+Code :-
+package pract7;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class RegisterUser {
+
+    public static void main(String[] args) {
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\ADMIN\\Downloads\\Drivers\\chromedriver-win64\\chromedriver.exe");
+       
+        WebDriver driver = new ChromeDriver();
+        try {
+            driver.navigate().to("C:/Users/ADMIN/Desktop/rohit.html");
+            driver.manage().window().maximize();
+            List<WebElement> checkBoxes = driver.findElements(By.tagName("input"));
+            int checkedCount = 0, uncheckedCount = 0;
+            // Iterate through the list of checkboxes and count checked and unchecked
+            for (WebElement checkBox : checkBoxes) {
+                if (checkBox.getAttribute("type").equals("checkbox")) {
+                    boolean isChecked = checkBox.isSelected();
+                    if(isChecked) {
+                    	System.out.println("Checkbox with id " + checkBox.getAttribute("id") + " is selected");
+                    }
+                    else {
+                    	System.out.println("Checkbox with id " + checkBox.getAttribute("id") + " is not selected");
+                    }
+                    if (isChecked) {
+                        checkedCount++;
+                    } else {
+                        uncheckedCount++;
+                    }
+                }
+            }
+            // Print the results
+            System.out.println("No. of selected checkboxes: " + checkedCount);
+            System.out.println("No. of unselected checkboxes: " + uncheckedCount);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit();
+        }
+    }
+
+}
+
+
+Output :-
+
+
